@@ -1,5 +1,7 @@
 package br.com.alura.ecomart.controller;
 
+import com.knuddels.jtokkit.Encodings;
+import com.knuddels.jtokkit.api.ModelType;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.ChatOptionsBuilder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +41,9 @@ public class CategorizadorDeProdutosController {
                 Resposta: Esportes
                 """;
 
+        var tokens = contarTokens(system, produto);
+        System.out.println("Total de Tokens: " +tokens);
+
         return this.chatClient.prompt()
                 .system(system)
                 .user(produto)
@@ -48,6 +53,12 @@ public class CategorizadorDeProdutosController {
                         .build())
                 .call()
                 .content();
+    }
+
+    public int contarTokens(String system, String user) {
+        var registry = Encodings.newDefaultEncodingRegistry();
+        var enc = registry.getEncodingForModel(ModelType.GPT_4O_MINI);
+        return enc.countTokens(system + user);
     }
 
 }
