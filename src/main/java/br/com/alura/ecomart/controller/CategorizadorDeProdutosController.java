@@ -13,7 +13,12 @@ public class CategorizadorDeProdutosController {
     private final ChatClient chatClient;
 
     public CategorizadorDeProdutosController(ChatClient.Builder chatClientBuilder) {
-        this.chatClient = chatClientBuilder.build();
+        this.chatClient = chatClientBuilder
+                .defaultOptions(ChatOptionsBuilder
+                        .builder()
+                        .withModel("gpt-4o")
+                        .build())
+                .build();
     }
 
     @GetMapping
